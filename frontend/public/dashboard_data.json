@@ -1,0 +1,41 @@
+{
+    "status": {
+        "market": "BTC/USDT",
+        "risk_level": "LOW",
+        "auth": "OK"
+    },
+    "portfolio": {
+        "balance": 10420.55,
+        "change": 4.21,
+        "weights": [0.40, 0.25, 0.15, 0.10, 0.10],
+        "sharpe": 1.84,
+        "win_rate": 64.2,
+        "trades": 47
+    },
+    "intelligence": {
+        "decision": "HOLD",
+        "consensus": 0.78,
+        "sentiment": "NEUTRAL",
+        "confidence": 0.85,
+        "volatility": 0.032,
+        "pressure": 0.15
+    },
+    "risk": {
+        "var_95": -0.024,
+        "drawdown": -0.018,
+        "expected_shortfall": -0.041
+    },
+    "trades_log": [
+        {
+            "id": "T-10042",
+            "side": "BUY",
+            "symbol": "BTC/USDT",
+            "qty": 0.0234,
+            "price": 62450.20,
+            "algo": "TWAP",
+            "status": "FILLED",
+            "time": 1716000000
+        }
+    ],
+    "timestamp": 1716000000
+}

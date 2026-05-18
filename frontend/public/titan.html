@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITÁN TERMINAL — Live Operations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dashboard-body">
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="topbar" data-testid="topbar">
+        <div class="topbar-left">
+            <div class="brand-mark brand-mark-sm">
+                <div class="brand-pulse"></div>
+                <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+                    <path d="M16 2L2 9v14l14 7 14-7V9L16 2z" stroke="url(#brandGrad2)" stroke-width="1.5"/>
+                    <path d="M16 11l-6 3v6l6 3 6-3v-6l-6-3z" fill="url(#brandGrad2)"/>
+                    <defs>
+                        <linearGradient id="brandGrad2" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#00d2ff"/>
+                            <stop offset="100%" stop-color="#9d50bb"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="topbar-brand-text">
+                <div class="topbar-title">TITÁN <span>TERMINAL</span></div>
+                <div class="topbar-version">v2.4.0 · LIVE</div>
+            </div>
+        </div>
+
+        <div class="topbar-center">
+            <div class="status-pill" data-testid="pill-market">
+                <span class="pill-label">MKT</span>
+                <span class="pill-value" id="pillMarket">BTC/USDT</span>
+            </div>
+            <div class="status-pill status-pill-good" id="pillRisk" data-testid="pill-risk">
+                <span class="pill-label">RISK</span>
+                <span class="pill-value" id="pillRiskValue">LOW</span>
+            </div>
+            <div class="status-pill status-pill-good" data-testid="pill-auth">
+                <span class="pill-label">AUTH</span>
+                <span class="pill-value" id="pillAuth">OK</span>
+            </div>
+            <div class="status-pill" data-testid="pill-uptime">
+                <span class="pill-label">UPTIME</span>
+                <span class="pill-value" id="pillUptime">00:00:00</span>
+            </div>
+            <div class="status-pill" data-testid="pill-latency">
+                <span class="pill-label">LATENCY</span>
+                <span class="pill-value" id="pillLatency">— ms</span>
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <div class="live-indicator" data-testid="live-indicator">
+                <span class="live-dot"></span>
+                <span>LIVE</span>
+            </div>
+            <button class="topbar-btn topbar-btn-danger" id="logoutBtn" data-testid="logout-btn">
+                <svg viewBox="0 0 16 16" fill="none">
+                    <path d="M10 2H3v12h7M7 8h8m0 0l-3-3m3 3l-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Logout</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN GRID ==================== -->
+    <main class="dashboard-grid">
+
+        <!-- ============ COL 1 : PORTFOLIO ============ -->
+        <section class="panel panel-portfolio" data-testid="panel-portfolio">
+            <div class="panel-head">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-blue">01</span>
+                    <h3 class="panel-title">Portfolio</h3>
+                </div>
+                <div class="panel-head-right">
+                    <span class="panel-badge" id="portfolioPlatform">BINANCE · TESTNET</span>
+                </div>
+            </div>
+
+            <div class="balance-hero">
+                <div class="balance-label">Total Equity</div>
+                <div class="balance-value" id="balanceValue">$0.00</div>
+                <div class="balance-change" id="balanceChange">
+                    <svg viewBox="0 0 12 12" fill="none">
+                        <path d="M2 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="balanceChangeText">+0.00%</span>
+                    <span class="balance-change-period">24h</span>
+                </div>
+            </div>
+
+            <div class="chart-wrap chart-wrap-md">
+                <canvas id="equityChart"></canvas>
+            </div>
+
+            <div class="mini-card-row">
+                <div class="mini-card">
+                    <div class="mini-card-label">Sharpe</div>
+                    <div class="mini-card-value" id="metricSharpe">—</div>
+                </div>
+                <div class="mini-card">
+                    <div class="mini-card-label">Win Rate</div>
+                    <div class="mini-card-value" id="metricWinRate">—</div>
+                </div>
+                <div class="mini-card">
+                    <div class="mini-card-label">Trades</div>
+                    <div class="mini-card-value" id="metricTrades">—</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ COL 2 : INTELLIGENCE ============ -->
+        <section class="panel panel-intel" data-testid="panel-intel">
+            <div class="panel-head">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-purple">02</span>
+                    <h3 class="panel-title">Swarm Intelligence</h3>
+                </div>
+                <div class="panel-head-right">
+                    <span class="panel-badge"><span class="badge-dot"></span> 4 AGENTS</span>
+                </div>
+            </div>
+
+            <div class="decision-hero" id="decisionHero" data-testid="decision-hero">
+                <div class="decision-orbit"></div>
+                <div class="decision-orbit decision-orbit-2"></div>
+                <div class="decision-label">Nash Equilibrium</div>
+                <div class="decision-value" id="decisionValue">HOLD</div>
+                <div class="decision-confidence">
+                    Confidence · <span id="decisionConfidence">0%</span>
+                </div>
+            </div>
+
+            <div class="pressure-gauge" data-testid="pressure-gauge">
+                <div class="gauge-track">
+                    <div class="gauge-marker" style="left: 50%;"></div>
+                    <div class="gauge-fill" id="gaugeFill"></div>
+                </div>
+                <div class="gauge-labels">
+                    <span class="gauge-sell">SELL PRESSURE</span>
+                    <span class="gauge-buy">BUY PRESSURE</span>
+                </div>
+            </div>
+
+            <div class="agent-grid">
+                <div class="agent-card" data-testid="agent-consensus">
+                    <div class="agent-card-label">Consensus</div>
+                    <div class="agent-card-value" id="agentConsensus">0%</div>
+                    <div class="agent-card-bar"><div class="agent-card-bar-fill" id="agentConsensusBar"></div></div>
+                </div>
+                <div class="agent-card" data-testid="agent-sentiment">
+                    <div class="agent-card-label">Sentiment</div>
+                    <div class="agent-card-value" id="agentSentiment">—</div>
+                    <div class="agent-card-bar"><div class="agent-card-bar-fill" id="agentSentimentBar"></div></div>
+                </div>
+                <div class="agent-card" data-testid="agent-confidence">
+                    <div class="agent-card-label">Confidence</div>
+                    <div class="agent-card-value" id="agentConfidence">0%</div>
+                    <div class="agent-card-bar"><div class="agent-card-bar-fill" id="agentConfidenceBar"></div></div>
+                </div>
+                <div class="agent-card" data-testid="agent-volatility">
+                    <div class="agent-card-label">Volatility</div>
+                    <div class="agent-card-value" id="agentVolatility">—</div>
+                    <div class="agent-card-bar"><div class="agent-card-bar-fill" id="agentVolatilityBar"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ COL 3 : RISK + QUANTUM ============ -->
+        <section class="panel panel-risk" data-testid="panel-risk">
+            <div class="panel-head">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-red">03</span>
+                    <h3 class="panel-title">Risk & Quantum</h3>
+                </div>
+                <div class="panel-head-right">
+                    <span class="panel-badge">VaR · D-WAVE</span>
+                </div>
+            </div>
+
+            <div class="risk-metric-row">
+                <div class="risk-metric">
+                    <div class="risk-metric-label">VaR 95%</div>
+                    <div class="risk-metric-value risk-metric-neg" id="metricVaR">—</div>
+                </div>
+                <div class="risk-metric">
+                    <div class="risk-metric-label">Max DD</div>
+                    <div class="risk-metric-value risk-metric-neg" id="metricDrawdown">—</div>
+                </div>
+                <div class="risk-metric">
+                    <div class="risk-metric-label">Exp. Short</div>
+                    <div class="risk-metric-value risk-metric-neg" id="metricES">—</div>
+                </div>
+            </div>
+
+            <div class="risk-level-wrap">
+                <div class="risk-level-label">
+                    <span>Risk Level</span>
+                    <span id="riskLevelText">LOW</span>
+                </div>
+                <div class="risk-level-track">
+                    <div class="risk-level-fill" id="riskLevelFill"></div>
+                    <div class="risk-level-ticks">
+                        <span>LOW</span><span>MED</span><span>HIGH</span><span>CRIT</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-wrap chart-wrap-donut">
+                <canvas id="portfolioDonut"></canvas>
+                <div class="donut-center">
+                    <div class="donut-center-label">Quantum</div>
+                    <div class="donut-center-value">QUBO</div>
+                </div>
+            </div>
+
+            <div class="weights-list" id="weightsList" data-testid="weights-list">
+                <!-- weights populated by JS -->
+            </div>
+        </section>
+
+        <!-- ============ COL 1+2 : CONTROL + LOGS ============ -->
+        <section class="panel panel-control" data-testid="panel-control">
+            <div class="panel-head">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-cyan">04</span>
+                    <h3 class="panel-title">Remote Command</h3>
+                </div>
+                <div class="panel-head-right">
+                    <span class="panel-badge" id="cmdStatusBadge">IDLE</span>
+                </div>
+            </div>
+
+            <div class="control-row">
+                <button class="ctrl-btn ctrl-btn-resume" id="resumeBtn" data-testid="resume-btn">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M4 3l9 5-9 5V3z"/>
+                    </svg>
+                    <span>Resume</span>
+                </button>
+                <button class="ctrl-btn ctrl-btn-pause" id="pauseBtn" data-testid="pause-btn">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                        <rect x="4" y="3" width="3" height="10"/>
+                        <rect x="9" y="3" width="3" height="10"/>
+                    </svg>
+                    <span>Pause</span>
+                </button>
+                <button class="ctrl-btn ctrl-btn-panic" id="panicBtn" data-testid="panic-btn">
+                    <svg viewBox="0 0 16 16" fill="none">
+                        <path d="M8 1L1 14h14L8 1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        <path d="M8 6v4M8 12v.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    </svg>
+                    <span>PANIC · Close All</span>
+                </button>
+            </div>
+
+            <div class="slider-wrap">
+                <div class="slider-head">
+                    <span class="slider-label">Quantum Aggressiveness</span>
+                    <span class="slider-value" id="aggValue">1.00x</span>
+                </div>
+                <input type="range" min="0.1" max="2.0" step="0.05" value="1.0" class="slider" id="aggSlider" data-testid="aggressiveness-slider">
+                <div class="slider-ticks">
+                    <span>0.1x · Conservative</span>
+                    <span>1.0x · Balanced</span>
+                    <span>2.0x · Aggressive</span>
+                </div>
+            </div>
+
+            <div class="cmd-feedback" id="cmdFeedback" data-testid="cmd-feedback"></div>
+        </section>
+
+        <!-- ============ TERMINAL LOGS ============ -->
+        <section class="panel panel-terminal" data-testid="panel-terminal">
+            <div class="panel-head panel-head-terminal">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-green">05</span>
+                    <h3 class="panel-title">System Logs</h3>
+                </div>
+                <div class="panel-head-right">
+                    <div class="terminal-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="terminal" id="terminal" data-testid="terminal">
+                <div class="terminal-line"><span class="log-time">--:--:--</span><span class="log-level log-info">[INFO]</span><span>Awaiting bot data stream…</span></div>
+            </div>
+        </section>
+
+        <!-- ============ TRADES TABLE ============ -->
+        <section class="panel panel-trades" data-testid="panel-trades">
+            <div class="panel-head">
+                <div class="panel-head-left">
+                    <span class="panel-tag tag-orange">06</span>
+                    <h3 class="panel-title">Execution Log</h3>
+                </div>
+                <div class="panel-head-right">
+                    <span class="panel-badge"><span class="badge-dot"></span> TWAP / VWAP</span>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table class="trades-table" data-testid="trades-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Side</th>
+                            <th>Symbol</th>
+                            <th class="num">Qty</th>
+                            <th class="num">Price</th>
+                            <th>Algo</th>
+                            <th>Status</th>
+                            <th class="num">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tradesBody">
+                        <tr class="empty-row"><td colspan="8">No executions yet — waiting for swarm decision…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
