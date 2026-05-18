@@ -250,66 +250,19 @@
             const data = await res.json();
             const latency = Math.round(performance.now() - t0);
             updateUI(data, latency);
+            if (consecutiveErrors > 0) {
+                appendLog('INFO', 'Bot data stream re-established');
+            }
             consecutiveErrors = 0;
         } catch (err) {
             consecutiveErrors++;
             if (consecutiveErrors === 1) {
                 appendLog('WARNING', 'Awaiting bot data stream — ' + err.message);
             }
-            // generate synthetic demo data so the dashboard is alive even without backend
-            updateUI(syntheticTick(), 0);
+            // Keep UI in zero/idle state — do NOT generate fake data.
+            // The bot must write real values into dashboard/dashboard_data.json
+            setText('pillLatency', '— ms');
         }
-    }
-
-    // Synthetic mock when bot data unavailable — keeps the UI alive
-    let synBalance = 10000;
-    let synTradesCount = 0;
-    function syntheticTick() {
-        synBalance += (Math.random() - 0.45) * 25;
-        const decisions = ['BUY', 'SELL', 'HOLD', 'HOLD', 'HOLD'];
-        const sentiments = ['BULLISH', 'NEUTRAL', 'BEARISH'];
-        const dec = decisions[Math.floor(Math.random() * decisions.length)];
-
-        // Occasionally fabricate a trade
-        const trades = [];
-        if (Math.random() < 0.15) {
-            synTradesCount++;
-            trades.push({
-                id: 'T-' + String(10000 + synTradesCount),
-                side: Math.random() < 0.5 ? 'BUY' : 'SELL',
-                symbol: 'BTC/USDT',
-                qty: +(Math.random() * 0.1).toFixed(4),
-                price: +(60000 + Math.random() * 5000).toFixed(2),
-                algo: Math.random() < 0.6 ? 'TWAP' : 'MARKET',
-                status: 'FILLED',
-                time: Date.now() / 1000
-            });
-        }
-
-        return {
-            status: { market: 'BTC/USDT', risk_level: 'LOW', auth: 'OK' },
-            portfolio: {
-                balance: synBalance,
-                change: ((synBalance - 10000) / 10000) * 100,
-                weights: [0.4, 0.25, 0.15, 0.1, 0.1],
-                sharpe: 1.84, win_rate: 64.2, trades: synTradesCount
-            },
-            intelligence: {
-                decision: dec,
-                consensus: 0.5 + Math.random() * 0.4,
-                sentiment: sentiments[Math.floor(Math.random() * sentiments.length)],
-                confidence: 0.6 + Math.random() * 0.35,
-                volatility: 0.02 + Math.random() * 0.04,
-                pressure: (Math.random() - 0.5) * 1.4
-            },
-            risk: {
-                var_95: -0.018 - Math.random() * 0.02,
-                drawdown: -Math.random() * 0.04,
-                expected_shortfall: -0.03 - Math.random() * 0.02
-            },
-            trades_log: trades,
-            timestamp: Date.now() / 1000
-        };
     }
 
     function updateUI(d, latency) {
