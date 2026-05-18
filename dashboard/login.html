@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITÁN TERMINAL — Authentication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+    <!-- Animated background grid -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Floating particles -->
+    <div class="particles" id="particles"></div>
+
+    <main class="login-container">
+        <!-- Brand -->
+        <header class="login-brand">
+            <div class="brand-mark">
+                <div class="brand-pulse"></div>
+                <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+                    <path d="M16 2L2 9v14l14 7 14-7V9L16 2z" stroke="url(#brandGrad)" stroke-width="1.5"/>
+                    <path d="M16 11l-6 3v6l6 3 6-3v-6l-6-3z" fill="url(#brandGrad)"/>
+                    <defs>
+                        <linearGradient id="brandGrad" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#00d2ff"/>
+                            <stop offset="100%" stop-color="#9d50bb"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1 class="brand-title">TITÁN <span>TERMINAL</span></h1>
+                <p class="brand-subtitle">Institutional-Grade Autonomous Trading</p>
+            </div>
+        </header>
+
+        <!-- Card -->
+        <section class="login-card" data-testid="login-card">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <h2 class="card-title">Secure Authentication</h2>
+                    <p class="card-subtitle">Connect your exchange to deploy the swarm</p>
+                </div>
+                <div class="encryption-badge" data-testid="encryption-badge">
+                    <svg viewBox="0 0 16 16" fill="none">
+                        <path d="M4 7V5a4 4 0 018 0v2M3 7h10v7H3V7z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>AES-128 ENCRYPTED</span>
+                </div>
+            </div>
+
+            <form id="loginForm" class="login-form" autocomplete="off">
+                <!-- Platform selector -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-num">01</span>
+                        <span>Trading Platform</span>
+                    </label>
+                    <div class="platform-grid" role="radiogroup" data-testid="platform-grid">
+                        <button type="button" class="platform-card active" data-platform="binance" data-testid="platform-binance">
+                            <div class="platform-logo platform-binance">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7.2 9.6L12 4.8l4.8 4.8 2.8-2.8L12 -.8 4.4 6.8 7.2 9.6zM0 12l2.8-2.8L5.6 12 2.8 14.8 0 12zm7.2 2.4L12 19.2l4.8-4.8 2.8 2.8L12 24.8 4.4 17.2l2.8-2.8zM18.4 12l2.8-2.8L24 12l-2.8 2.8L18.4 12zm-3.6 0L12 14.8 9.2 12 12 9.2 14.8 12z"/>
+                                </svg>
+                            </div>
+                            <span class="platform-name">Binance</span>
+                            <span class="platform-meta">Spot + Futures</span>
+                            <div class="platform-check"></div>
+                        </button>
+
+                        <button type="button" class="platform-card" data-platform="deriv" data-testid="platform-deriv">
+                            <div class="platform-logo platform-deriv">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="9"/>
+                                    <path d="M8 12h8M12 8v8"/>
+                                </svg>
+                            </div>
+                            <span class="platform-name">Deriv</span>
+                            <span class="platform-meta">Synthetic + FX</span>
+                            <div class="platform-check"></div>
+                        </button>
+
+                        <button type="button" class="platform-card" data-platform="iqoption" data-testid="platform-iqoption">
+                            <div class="platform-logo platform-iq">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 17l6-6 4 4 8-8"/>
+                                    <path d="M14 7h7v7"/>
+                                </svg>
+                            </div>
+                            <span class="platform-name">IQ Option</span>
+                            <span class="platform-meta">Binary Options</span>
+                            <div class="platform-check"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- API Credentials -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-num">02</span>
+                        <span>API Credentials</span>
+                    </label>
+                    <div class="input-stack">
+                        <div class="input-wrap">
+                            <svg class="input-icon" viewBox="0 0 16 16" fill="none">
+                                <path d="M10 1l4 4-8 8H2v-4l8-8z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                            </svg>
+                            <input
+                                type="text"
+                                id="apiKey"
+                                name="apiKey"
+                                placeholder="API Key"
+                                autocomplete="off"
+                                spellcheck="false"
+                                required
+                                data-testid="api-key-input"
+                            >
+                            <span class="input-status"></span>
+                        </div>
+                        <div class="input-wrap">
+                            <svg class="input-icon" viewBox="0 0 16 16" fill="none">
+                                <path d="M4 7V5a4 4 0 018 0v2M3 7h10v7H3V7z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                            </svg>
+                            <input
+                                type="password"
+                                id="apiSecret"
+                                name="apiSecret"
+                                placeholder="API Secret"
+                                autocomplete="new-password"
+                                spellcheck="false"
+                                required
+                                data-testid="api-secret-input"
+                            >
+                            <button type="button" class="toggle-visibility" id="toggleSecret" data-testid="toggle-secret-btn" aria-label="Toggle secret visibility">
+                                <svg viewBox="0 0 16 16" fill="none">
+                                    <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5z" stroke="currentColor" stroke-width="1.3"/>
+                                    <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Environment toggle -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <span class="label-num">03</span>
+                        <span>Execution Environment</span>
+                    </label>
+                    <div class="env-toggle" data-testid="env-toggle">
+                        <button type="button" class="env-option active" data-env="testnet" data-testid="env-testnet">
+                            <div class="env-icon-wrap env-safe">
+                                <svg viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="env-info">
+                                <div class="env-name">Testnet <span class="env-tag">RECOMMENDED</span></div>
+                                <div class="env-desc">Sandbox — paper money, zero risk</div>
+                            </div>
+                        </button>
+                        <button type="button" class="env-option" data-env="production" data-testid="env-production">
+                            <div class="env-icon-wrap env-warn">
+                                <svg viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 1L1 14h14L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                                    <path d="M8 6v4M8 12v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="env-info">
+                                <div class="env-name">Production <span class="env-tag env-tag-danger">LIVE FUNDS</span></div>
+                                <div class="env-desc">Real money. Bot executes real orders.</div>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="production-warning" id="productionWarning" data-testid="production-warning">
+                        <svg viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1L1 14h14L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 6v4M8 12v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <div>
+                            <strong>Production mode active.</strong> The bot will execute live trades with real capital. Ensure all stress tests have passed.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="submit-btn" id="submitBtn" data-testid="login-submit-btn">
+                    <span class="submit-label">
+                        <span>DEPLOY TITÁN</span>
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="submit-loader">
+                        <span class="loader-dot"></span>
+                        <span class="loader-dot"></span>
+                        <span class="loader-dot"></span>
+                    </span>
+                </button>
+
+                <!-- Status message -->
+                <div class="form-status" id="formStatus" data-testid="form-status"></div>
+            </form>
+
+            <!-- Security footer -->
+            <footer class="login-footer">
+                <div class="security-stat">
+                    <div class="stat-dot stat-dot-ok"></div>
+                    <span>Fernet AES-128 CBC</span>
+                </div>
+                <div class="security-stat">
+                    <div class="stat-dot stat-dot-ok"></div>
+                    <span>HMAC SHA-256</span>
+                </div>
+                <div class="security-stat">
+                    <div class="stat-dot stat-dot-ok"></div>
+                    <span>Local Storage Only</span>
+                </div>
+            </footer>
+        </section>
+
+        <p class="login-disclaimer">
+            Your keys never leave this machine. Credentials are encrypted at rest using cryptographic primitives audited by the Python cryptography library.
+        </p>
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
